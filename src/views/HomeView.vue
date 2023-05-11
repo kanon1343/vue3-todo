@@ -18,22 +18,22 @@ const ref_h1 = ref();
 onMounted(() => {
   ref_h1.value.innerHTML = 'Updated title!';
   const ul = ref_ul.value;
-  const li = ref_li.value;
+  const li = ref_li.value[0];
 
-  console.log(ul.clientWidth, li);
+  console.log(ul.clientWidth, li.clientWidth);
 })
 
 class Person {
   name: string;
-  age: number;
+  id: number;
 
   constructor(name: string, age: number) {
     this.name = name;
-    this.age = age;
+    this.id = age;
   }
 
   sayHello = () => {
-    console.log(`My name is ${this.name}, and I'm ${this.age} years old.`);
+    console.log(`My name is ${this.name}, and I'm ${this.id} years old.`);
   }
 }
 
@@ -62,6 +62,7 @@ axios.get(url).then(function(response) {
   data = response.data;
   console.log(data);
 })
+
 </script>
 
 <template>
@@ -78,7 +79,6 @@ axios.get(url).then(function(response) {
 
   <ul>
     <li
-      ref="ref_li"
       :class="{ todo: true, finished: todo.finished }"
       :key="todo.label"
       v-for="todo in filteredTodos"
@@ -88,9 +88,12 @@ axios.get(url).then(function(response) {
   </ul>
 
   <ul ref="ref_ul">
-    <li>サンプル１</li>
-    <li>サンプル２</li>
-    <li>サンプル３</li>
+    <li
+      ref="ref_li"
+      v-for="n in 5"
+      :key="n"
+      v-text="n"
+    ></li>
   </ul>
 
 </template>

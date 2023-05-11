@@ -27,8 +27,7 @@ function post() {
   store.login(authName.value, authPass.value);
   if(store.isAuthenticated) {
     console.log('認証成功');
-    console.log(route.params.redirect);
-    // router.push('home');
+    router.push({ path: `${route.query.redirect}` });
   } else {
     console.log('認証失敗');
   }

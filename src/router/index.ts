@@ -11,7 +11,7 @@ const router = createRouter({
       component: HomeView
     },
     {
-      path: '/login/:redirect', 
+      path: '/login/:redirect?', 
       name: 'login',
       component: () => import('../views/LoginView.vue')
     },
@@ -26,10 +26,11 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to) => {
   const loginStore = useLoginStore();
-  if (to.name !== 'login' && loginStore.isAuthenticated) next({ path: '/login', query: { redirect: to.fullPath } });
-  else next();
+  if (to.name !== 'login' && loginStore.isAuthenticated === false) {
+    return { name: 'login', query: { redirect: to.fullPath } };
+  }
 })
 
 export default router
