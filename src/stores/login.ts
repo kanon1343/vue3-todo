@@ -8,14 +8,20 @@ export const useLoginStore = defineStore('login', () => {
     // actions.
     function login(name: string, password: string) {
         if(name === 'kanon' && password === 'harada') {
-            return isAuthenticated.value = true;
+            isAuthenticated.value = true;
         } else {
-            return isAuthenticated.value = false;
+            isAuthenticated.value = false;
         }
     }
+
+    function logout() {
+        return isAuthenticated.value = false;
+    }
+
     return {
         isAuthenticated,
         login,
+        logout,
     };    
 },
 {

@@ -2,15 +2,24 @@
 import { storeToRefs } from "pinia";
 import { onMounted, reactive, ref } from "vue";
 import { useTodoStore } from "@/stores/todos";
+import { useLoginStore } from "@/stores/login";
 
 const state = reactive({ newTodoLabel: "" });
 
 // useTodoStore を呼び出すだけで、グローバルストアへのアクセスが可能
-const store = useTodoStore();
+const todoStore = useTodoStore();
+const loginStore = useLoginStore();
 
 // ストア内の State や Getters はリアクティブオブジェクトなので、
 // リアクティブを失わずに取り出す場合は storeToRefs を用いる
-const { filteredTodos, filter } = storeToRefs(store);
+const { filteredTodos, filter } = storeToRefs(todoStore);
+
+function logout() {
+  loginStore.logout();
+  router.push('/login');
+}
+
+
 const ref_ul = ref();
 const ref_li = ref();
 const ref_h1 = ref();
@@ -40,15 +49,16 @@ class Person {
 const person = new Person("Alice", 25);
 person.sayHello(); // My name is Alice, and I'm 25 years old.
 
-const toggleTodo = (id: number) => store.toggleTodo(id);
+const toggleTodo = (id: number) => todoStore.toggleTodo(id);
 const addTodo = () => {
   if (state.newTodoLabel !== "") {
-    store.addTodo(state.newTodoLabel);
+    todoStore.addTodo(state.newTodoLabel);
     state.newTodoLabel = "";
   }
 };
 
 import axios from 'axios'
+import router from "@/router";
 
 let url: string = 'https://udemy-utils.herokuapp.com/api/v1/articles?token=token123';
 
@@ -95,7 +105,7 @@ axios.get(url).then(function(response) {
       v-text="n"
     ></li>
   </ul>
-
+  <button @click="logout">ログアウト</button>
 </template>
 
 <style scoped>
