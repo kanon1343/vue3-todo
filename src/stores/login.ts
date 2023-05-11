@@ -1,20 +1,21 @@
 import { defineStore } from "pinia";
+import { ref } from "vue";
 
 export const useLoginStore = defineStore('login', () => {
     // state.
-    const name: string = '';
-    const password: string = '';
-    const OK: boolean = true;
+    const isAuthenticated = ref(true);
 
     // actions.
     function login(name: string, password: string) {
-        console.log(name, password);
-        return OK;
+        if(name === 'kanon' && password === 'harada') {
+            return isAuthenticated.value = true;
+        } else {
+            return isAuthenticated.value = false;
+        }
     }
 
     return {
-        name,
-        password,
+        isAuthenticated,
         login,
     };    
 })

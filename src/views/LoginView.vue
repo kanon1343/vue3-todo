@@ -1,26 +1,17 @@
 <script setup lang="ts">
-// // import axios from 'axios';
-// import router from '@/router';
 import { useLoginStore } from '@/stores/login';
-import { useRouter } from 'vue-router';
-  // data () {
-  //   return {
-  //     showPassword : false,
-  //     msg : 'userIDとpasswordを入力して下さい',
-  //     authId : '',
-  //     authPass : ''
-  //   }
-  // },
+import { ref } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+
 // data部分.
 const router = useRouter();
+const route = useRoute();
 const store = useLoginStore();
-// const showPassword: boolean = false;
 const msg: string = 'userIDとpasswordを入力して下さい';
-const authName: string = '';
-const authPass: string = '';
+const authName = ref('');
+const authPass = ref('');
 
   // method部分.
-function post() {
     // const data = { id : authName, pass : authPass };
     // msg = await axios.post('/fnclogin', data)    // axiosの書き方.
     // .then(function (response) {
@@ -31,13 +22,15 @@ function post() {
     //   console.log(error);
     //   return error.message;
     // });
-    
-  const check: boolean = store.login(authName, authPass);
-  if(!check){
+
+function post() {
+  store.login(authName.value, authPass.value);
+  if(store.isAuthenticated) {
     console.log('認証成功');
-    router.push('/home');
+    console.log(route.params.redirect);
+    // router.push('home');
   } else {
-    alert(msg);
+    console.log('認証失敗');
   }
 }
 </script>

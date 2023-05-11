@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
-import { reactive } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import { useTodoStore } from "@/stores/todos";
 
 const state = reactive({ newTodoLabel: "" });
@@ -11,6 +11,34 @@ const store = useTodoStore();
 // ストア内の State や Getters はリアクティブオブジェクトなので、
 // リアクティブを失わずに取り出す場合は storeToRefs を用いる
 const { filteredTodos, filter } = storeToRefs(store);
+const ref_ul = ref();
+const ref_li = ref();
+const ref_h1 = ref();
+
+onMounted(() => {
+  ref_h1.value.innerHTML = 'Updated title!';
+  const ul = ref_ul.value;
+  const li = ref_li.value;
+
+  console.log(ul.clientWidth, li);
+})
+
+class Person {
+  name: string;
+  age: number;
+
+  constructor(name: string, age: number) {
+    this.name = name;
+    this.age = age;
+  }
+
+  sayHello = () => {
+    console.log(`My name is ${this.name}, and I'm ${this.age} years old.`);
+  }
+}
+
+const person = new Person("Alice", 25);
+person.sayHello(); // My name is Alice, and I'm 25 years old.
 
 const toggleTodo = (id: number) => store.toggleTodo(id);
 const addTodo = () => {
@@ -46,9 +74,11 @@ axios.get(url).then(function(response) {
   <label for="finished">完了済み</label>
   <input id="unfinished" type="radio" v-model="filter" value="unfinished" />
   <label for="unfinished">未完了</label>
+  <h1 ref="ref_h1">todos</h1>
 
   <ul>
     <li
+      ref="ref_li"
       :class="{ todo: true, finished: todo.finished }"
       :key="todo.label"
       v-for="todo in filteredTodos"
@@ -56,6 +86,13 @@ axios.get(url).then(function(response) {
       @click="toggleTodo(todo.id)"
     />
   </ul>
+
+  <ul ref="ref_ul">
+    <li>サンプル１</li>
+    <li>サンプル２</li>
+    <li>サンプル３</li>
+  </ul>
+
 </template>
 
 <style scoped>

@@ -1,16 +1,17 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import { useLoginStore } from '@/stores/login'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/home',
+      path: '/',
       name: 'home',
       component: HomeView
     },
     {
-      path: '/',
+      path: '/login/:redirect', 
       name: 'login',
       component: () => import('../views/LoginView.vue')
     },
@@ -23,6 +24,12 @@ const router = createRouter({
       component: () => import('../views/AboutView.vue')
     }
   ]
+})
+
+router.beforeEach((to, from, next) => {
+  const loginStore = useLoginStore();
+  if (to.name !== 'login' && loginStore.isAuthenticated) next({ path: '/login', query: { redirect: to.fullPath } });
+  else next();
 })
 
 export default router

@@ -3,9 +3,6 @@ import Login from "./views/LoginView.vue";
 </script>
 
 <template>
-  <header>
-  </header>
-
   <main>
     <router-view />
   </main>
